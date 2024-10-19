@@ -40,7 +40,7 @@
         // Fetch data from the API and populate the table
         async function fetchSchedule() {
             try {
-                const response = await fetch('http://localhost:5000/api/schedule');
+                const response = await fetch('http://NflScheduleApi2-env.eba-pypypkfm.us-east-1.elasticbeanstalk.com/api/schedule');
                 const schedule = await response.json();
                 
                 const tableBody = document.querySelector('#schedule-table tbody');
