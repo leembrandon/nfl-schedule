@@ -48,24 +48,35 @@
                 tableBody.innerHTML = ''; // Clear any existing rows
                 
                  schedule.forEach((game) => {
-      // Assuming all times are in Eastern Time
-      const easternTimeStr = `${game.game_date}T${game.game_time}-05:00`; // EST offset
-      const easternTime = new Date(easternTimeStr);
+  const gameDate = new Date(`${game.game_date}T${game.game_time}`); // Create a date object with no timezone specified
+  
+  // Determine if the date is in DST for Eastern Time
+  const isDST = (date) => {
+    const january = new Date(date.getFullYear(), 0, 1); // January 1st
+    const july = new Date(date.getFullYear(), 6, 1); // July 1st
+    const standardOffset = Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+    return date.getTimezoneOffset() < standardOffset; // If offset is less, it's DST
+  };
 
-      // Convert to the user's local timezone
-      const localTime = easternTime.toLocaleTimeString('en-US', { timeZoneName: 'short' });
+  // Use the appropriate offset based on whether it's in DST
+  const offset = isDST(gameDate) ? '-04:00' : '-05:00'; // EDT or EST
+  const easternTimeStr = `${game.game_date}T${game.game_time}${offset}`; // Use dynamic offset
+  const easternTime = new Date(easternTimeStr); // Convert to Eastern Time
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
-                <td>${game.game_date}</td>
-                <td>${game.game_day}</td>
-                <td>${game.home_team}</td>
-                <td>${game.away_team}</td>
-                <td>${localTime}</td> <!-- Display converted time -->
-                <td>${game.location}</td>
-            `;
-      tableBody.appendChild(row);
-    });
+  // Convert to the user's local timezone
+  const localTime = easternTime.toLocaleTimeString('en-US', { timeZoneName: 'short' });
+
+  const row = document.createElement("tr");
+  row.innerHTML = `
+            <td>${game.game_date}</td>
+            <td>${game.game_day}</td>
+            <td>${game.home_team}</td>
+            <td>${game.away_team}</td>
+            <td>${localTime}</td> <!-- Display converted time -->
+            <td>${game.location}</td>
+        `;
+  tableBody.appendChild(row);
+});
   } catch (error) {
     console.error("Error fetching schedule:", error);
   }
