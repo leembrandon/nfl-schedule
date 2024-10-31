@@ -48,25 +48,21 @@
                 tableBody.innerHTML = ''; // Clear any existing rows
                 
                 schedule.forEach((game) => {
-                // Create a new date string using the game_date and game_time
-              const dateTimeStr = `${game.game_date}T${game.game_time}Z`; // Assuming the time is UTC
-              const localTime = new Date(dateTimeStr).toLocaleTimeString('en-US', { timeZoneName: 'short' });
-
               const row = document.createElement("tr");
-                  row.innerHTML = `
-                <td>${game.game_date}</td>
-                <td>${game.game_day}</td>
-                <td>${game.home_team}</td>
-                <td>${game.away_team}</td>
-                <td>${localTime}</td> <!-- Display converted time -->
-                <td>${game.location}</td>
-            `;
-      tableBody.appendChild(row);
-    });
-  } catch (error) {
-    console.error("Error fetching schedule:", error);
-  }
-}
+              row.innerHTML = `
+                        <td>${game.game_date}</td>
+                        <td>${game.game_day}</td>
+                        <td>${game.home_team}</td>
+                        <td>${game.away_team}</td>
+                        <td>${game.game_time}</td>
+                        <td>${game.location}</td>
+                    `;
+              tableBody.appendChild(row);
+            });
+          } catch (error) {
+            console.error("Error fetching schedule:", error);
+          }
+        }
 
         // Fetch the schedule when the page loads
         window.onload = fetchSchedule;
