@@ -64,7 +64,11 @@
   const easternTime = new Date(easternTimeStr); // Convert to Eastern Time
 
   // Convert to the user's local timezone
-  const localTime = easternTime.toLocaleTimeString('en-US', { timeZoneName: 'short' });
+  const localTime = easternTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  });
 
   const row = document.createElement("tr");
   row.innerHTML = `
